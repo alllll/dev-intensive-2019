@@ -25,23 +25,22 @@ fun Date.add(value:Int, units: TimeUnits=TimeUnits.SECOND) : Date {
     this.time = time
     return this
 }
-
 fun Date.humanizeDiff(date:Date = Date()): String {
-    val secondsBetweenDate = date.time-this.time
+    val secondsBetweenDate = date.time - this.time
     val result = when{
-        secondsBetweenDate in 0 .. 1 -> "только что"
-        secondsBetweenDate in 1 .. 45 -> "несколько секунд назад"
-        secondsBetweenDate in 45 .. 75 -> "минуту назад"
-        secondsBetweenDate in 75 .. (45 * MINUTE) -> "${TimeUnits.MINUTE.plural((secondsBetweenDate / MINUTE).toInt())} назад"
+        secondsBetweenDate in 0 .. (1 * SECOND) -> "только что"
+        secondsBetweenDate in (1 * SECOND) .. (45 * SECOND) -> "несколько секунд назад"
+        secondsBetweenDate in (45 * SECOND) .. (75 * SECOND) -> "минуту назад"
+        secondsBetweenDate in (75 * SECOND) .. (45 * MINUTE) -> "${TimeUnits.MINUTE.plural((secondsBetweenDate / MINUTE).toInt())} назад"
         secondsBetweenDate in (45 * MINUTE) .. (75 * MINUTE) -> "час назад"
         secondsBetweenDate in (75 * MINUTE) .. (22 * HOUR) -> "${TimeUnits.HOUR.plural((secondsBetweenDate / HOUR).toInt() )} назад"
         secondsBetweenDate in (22 * HOUR) .. (26 * HOUR) -> "день назад"
         secondsBetweenDate in (26 * HOUR) .. (360 * DAY) -> "${TimeUnits.DAY.plural((secondsBetweenDate / DAY).toInt())} назад"
         secondsBetweenDate > (360 * DAY)  -> "более года назад"
-        -secondsBetweenDate in 0 .. 1 -> "только что"
-        -secondsBetweenDate in 1 .. 45 -> "через несколько секунд"
-        -secondsBetweenDate in 45 .. 75 -> "через минуту"
-        -secondsBetweenDate in 75 .. (45 * MINUTE) -> "через ${TimeUnits.MINUTE.plural((-secondsBetweenDate / MINUTE).toInt())}"
+        -secondsBetweenDate in 0 .. (1 * SECOND) -> "только что"
+        -secondsBetweenDate in (1 * SECOND) .. (45 * SECOND) -> "через несколько секунд"
+        -secondsBetweenDate in (45 * SECOND) .. (75 * SECOND) -> "через минуту"
+        -secondsBetweenDate in (75 * SECOND) .. (45 * MINUTE) -> "через ${TimeUnits.MINUTE.plural((-secondsBetweenDate / MINUTE).toInt())}"
         -secondsBetweenDate in (45 * MINUTE) .. (75 * MINUTE) -> "через час"
         -secondsBetweenDate in (75 * MINUTE) .. (22 * HOUR) -> "через ${TimeUnits.HOUR.plural((-secondsBetweenDate / HOUR).toInt())}"
         -secondsBetweenDate in (22 * HOUR) .. (26 * HOUR) -> "через день"
@@ -52,7 +51,6 @@ fun Date.humanizeDiff(date:Date = Date()): String {
     }
     return result
 }
-
 
 
 enum class TimeUnits {
