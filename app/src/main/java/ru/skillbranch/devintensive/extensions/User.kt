@@ -18,6 +18,3 @@ fun User.toUserView(): UserView{
     status = status)
 }
 
-private fun Date.humanizeDiff(date:Date = Date()): String {
-    TODO("not implemented")
-}
