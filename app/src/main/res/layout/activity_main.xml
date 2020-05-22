@@ -39,7 +39,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:lines="1"
             android:textColor="@color/color_grey_light"
             android:textColorHint="@color/color_grey_light"
             android:hint="Введите текст"
@@ -47,6 +46,9 @@ xmlns:android="http://schemas.android.com/apk/res/android">
             android:paddingBottom="@dimen/spacing_normal_16"
             android:layout_marginLeft="@dimen/spacing_normal_16"
             android:layout_marginRight="@dimen/spacing_normal_16"
+            android:imeOptions="actionDone"
+            android:imeActionLabel="Done"
+            android:inputType="text"
             />
 
         <ImageView

@@ -5,11 +5,13 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.KeyEvent
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,7 +46,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
         textTxt.text = benderObj.askQuestion()
         sendBtn.setOnClickListener(this)
+        messageEt.setOnEditorActionListener { v, actionId, event ->
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                val (phrase, color) = benderObj.listenAnswer(messageEt.text.toString().toLowerCase())
+                messageEt.setText("")
+                val (r, g, b) = color
+                benderImage.setColorFilter(Color.rgb(r, g ,b), PorterDuff.Mode.MULTIPLY)
+                textTxt.text = phrase
+                true
+            } else {
+                false
+            }
+        }
+
     }
+
 
     override fun onRestart() {
         super.onRestart()
@@ -92,4 +108,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             textTxt.text = phrase
         }
     }
+
+
 }
