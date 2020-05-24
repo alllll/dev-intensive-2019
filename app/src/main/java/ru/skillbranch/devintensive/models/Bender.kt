@@ -55,15 +55,19 @@ class Bender(var status:Status = Status.NORMAL, var question:Question = Question
         NAME("Как меня зовут?", listOf("бендер", "bender")) {
             override fun nextQuestion(): Question = PROFESSION
             override fun validation(answer: String): String? {
-                return if(answer[0].isLowerCase()) "Имя должно начинаться с заглавной буквы"
-                else null
+                return if(answer.isNotEmpty()){
+                    if(answer[0].isLowerCase()) "Имя должно начинаться с заглавной буквы"
+                    else null
+                }else null
             }
         },
         PROFESSION("Назови мою профессию?", listOf("сгибальщик", "bender")) {
             override fun nextQuestion(): Question = MATERIAL
             override fun validation(answer: String): String? {
-                return if(answer[0].isUpperCase()) "Профессия должна начинаться со строчной буквы"
-                else null
+                return if(answer.isNotEmpty()){
+                    if(answer[0].isUpperCase()) "Профессия должна начинаться со строчной буквы"
+                    else null
+            } else null
             }
         },
         MATERIAL("Из чего я сделан?", listOf("металл", "дерево", "metal", "iron", "wood")) {
