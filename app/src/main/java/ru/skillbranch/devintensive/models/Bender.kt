@@ -1,5 +1,7 @@
 package ru.skillbranch.devintensive.models
 
+import androidx.core.text.isDigitsOnly
+
 class Bender(var status:Status = Status.NORMAL, var question:Question = Question.NAME) {
     var countNegotiveAnswer: Int = 0
 
@@ -13,7 +15,9 @@ class Bender(var status:Status = Status.NORMAL, var question:Question = Question
     }
 
     fun listenAnswer(answer:String) : Pair<String, Triple<Int,Int, Int>>{
-        return if(question.answers.contains(answer)){
+
+        if(question.validation(answer)!=null) return "${question.validation(answer)}\n${question.question}" to status.color
+        else return if(question.answers.contains(answer.toLowerCase())){
            question = question.nextQuestion()
             "Отлично - ты справился\n${question.question}" to status.color
         }
@@ -30,6 +34,7 @@ class Bender(var status:Status = Status.NORMAL, var question:Question = Question
             }
         }
     }
+
 
     enum class Status(val color : Triple<Int, Int, Int>) {
         NORMAL(Triple(255,255,255)),
@@ -49,25 +54,50 @@ class Bender(var status:Status = Status.NORMAL, var question:Question = Question
     enum class Question(val question:String, val answers: List<String>) {
         NAME("Как меня зовут?", listOf("бендер", "bender")) {
             override fun nextQuestion(): Question = PROFESSION
+            override fun validation(answer: String): String? {
+                return if(answer[0].isLowerCase()) "Имя должно начинаться с заглавной буквы"
+                else null
+            }
         },
         PROFESSION("Назови мою профессию?", listOf("сгибальщик", "bender")) {
             override fun nextQuestion(): Question = MATERIAL
+            override fun validation(answer: String): String? {
+                return if(answer[0].isUpperCase()) "Профессия должна начинаться со строчной буквы"
+                else null
+            }
         },
         MATERIAL("Из чего я сделан?", listOf("металл", "дерево", "metal", "iron", "wood")) {
             override fun nextQuestion(): Question = BDAY
+            override fun validation(answer: String): String? {
+                return if(answer.contains(Regex("[0-9]"))) "Материал не должен содержать цифр"
+                else null
+            }
         },
         BDAY("Когда меня создали?", listOf("2993")) {
             override fun nextQuestion(): Question = SERIAL
+            override fun validation(answer: String): String? {
+
+                    return if(!answer.isDigitsOnly()) "Год моего рождения должен содержать только цифры"
+                    else null
+            }
+
         },
         SERIAL("Мой серийный номер?", listOf("2716057")) {
             override fun nextQuestion(): Question = IDLE
+            override fun validation(answer: String): String? {
+               return if(answer.length != 7 || !answer.isDigitsOnly())  "Серийный номер содержит только цифры, и их 7"
+                else null
+            }
         },
         IDLE("На этом все, вопросов больше нет", listOf()) {
             override fun nextQuestion(): Question = IDLE
+            override fun validation(answer: String): String? {
+                return null
+            }
         };
 
         abstract fun nextQuestion():Question
-
+        abstract fun validation(answer : String) : String?
     }
 
 }
